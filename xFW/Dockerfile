@@ -8,6 +8,6 @@ RUN apt-get update \
 
 COPY bin/bpftool   /usr/local/bin/bpftool
 COPY bin/tempesta  /opt/tempesta
-
+COPY bin/xFW.sh    /opt/tempesta
 WORKDIR /opt/tempesta
 CMD [ "/bin/bash"]

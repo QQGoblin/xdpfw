@@ -1,0 +1,8 @@
+{
+    "devices": "bond0",
+    "devices-mode": "skb",
+    "deployment-mode": "host",
+    "dns": false,
+    "event-logging": "off",
+    "mgr-args": "--http-port 39090 --port 50051"
+}

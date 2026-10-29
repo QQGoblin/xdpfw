@@ -1,0 +1,36 @@
+[Unit]
+Description=xFW in extracted rootfs
+After=network.target
+RequiresMountsFor=/opt/tempesta/rootfs /etc/tempesta /sys/fs/bpf
+
+[Service]
+Type=forking
+User=root
+RootDirectory=/opt/tempesta/rootfs
+WorkingDirectory=/etc/tempesta
+PIDFile=/run/tempesta/tempesta_mgr.pid
+
+PrivateMounts=yes
+MountAPIVFS=yes
+PrivateNetwork=no
+# Share /run across start/stop namespaces so xfwctl can find both daemon PID files.
+BindPaths=/etc/tempesta /sys/fs/bpf /run/tempesta:/run
+BindReadOnlyPaths=/sys/kernel/btf /boot /lib/modules
+
+RuntimeDirectory=tempesta
+LogsDirectory=tempesta
+LimitMEMLOCK=infinity
+
+ExecStart=/opt/tempesta/xFW.sh -c /etc/tempesta/xfw.json --start
+ExecStopPost=/opt/tempesta/xFW.sh -c /etc/tempesta/xfw.json --stop
+
+Restart=on-failure
+RestartSec=3s
+KillMode=control-group
+TimeoutStartSec=60s
+TimeoutStopSec=30s
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
