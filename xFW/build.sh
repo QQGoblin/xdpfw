@@ -5,7 +5,7 @@ ROOTFS="rootfs"
 CONTAINER_NAME="xfw-exporter"
 
 # 构建 xFW 运行时镜像
-#docker build --network=host  -t ${IMAGE} -f Dockerfile .
+docker build --network=host  -t ${IMAGE} -f Dockerfile .
 
 # 导出 rootfs
 rm -rf "$ROOTFS"
