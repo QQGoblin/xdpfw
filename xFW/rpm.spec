@@ -14,6 +14,7 @@ Source1:        xfw.json
 Source2:        xfwctl
 Source3:        xfw.service
 Source4:        xFW.sh
+Source5:        rules.tar.gz
 
 BuildRequires:  coreutils
 BuildRequires:  tar
@@ -34,12 +35,15 @@ and systemd service.
 %prep
 %setup -q -c -T
 tar -xzf "%{SOURCE0}"
+tar -xzf "%{SOURCE5}"
 install -m 0755 "%{SOURCE4}" rootfs/opt/tempesta/xFW.sh
 
 %install
 install -d -m 0755 "%{buildroot}%{app_dir}"
 tar -czf "%{buildroot}%{app_dir}/rootfs.tar.gz" rootfs
 install -D -m 0644 "%{SOURCE1}" "%{buildroot}%{_sysconfdir}/tempesta/xfw.json"
+install -d -m 0755 "%{buildroot}%{_sysconfdir}/tempesta/rules"
+cp -a rules/. "%{buildroot}%{_sysconfdir}/tempesta/rules/"
 install -D -m 0755 "%{SOURCE2}" "%{buildroot}/usr/local/bin/xfwctl"
 ln -s xfwctl "%{buildroot}/usr/local/bin/tfw"
 install -D -m 0644 "%{SOURCE3}" "%{buildroot}%{unit_dir}/xfw.service"
@@ -85,6 +89,7 @@ fi
 %{app_dir}/rootfs.tar.gz
 %dir %{_sysconfdir}/tempesta
 %{_sysconfdir}/tempesta/xfw.json
+%{_sysconfdir}/tempesta/rules
 /usr/local/bin/xfwctl
 /usr/local/bin/tfw
 %{unit_dir}/xfw.service

@@ -13,6 +13,7 @@ install -m 0644 hack/xfw.json "$RPMBUILD_DIR/SOURCES/xfw.json"
 install -m 0644 hack/xfwctl "$RPMBUILD_DIR/SOURCES/xfwctl"
 install -m 0644 hack/xfw.service "$RPMBUILD_DIR/SOURCES/xfw.service"
 install -m 0644 docker/xFW.sh "$RPMBUILD_DIR/SOURCES/xFW.sh"
+tar -czf "$RPMBUILD_DIR/SOURCES/rules.tar.gz" rules
 install -m 0644 rpm.spec "$RPMBUILD_DIR/SPECS/rpm.spec"
 
 # 构建二进制 RPM，rpmbuild 会在输出目录下创建架构子目录
