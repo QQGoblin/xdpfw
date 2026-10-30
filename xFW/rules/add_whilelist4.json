@@ -1,0 +1,10 @@
+xfw {
+    src=whitelist4_tcp/add ip4.tcp {
+        172.28.77.77
+
+    }
+
+    src=whitelist4_udp/add ip4.udp {
+        172.28.77.77
+    }
+}

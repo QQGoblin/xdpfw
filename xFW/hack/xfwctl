@@ -7,11 +7,16 @@ import sys
 
 
 SERVICE = "xfw.service"
-XFWCTL = "/opt/tempesta/bin/xfwctl"
+NAMESPACE_BIN_DIR = "/opt/tempesta/bin"
 NAMESPACE_PATH = (
     "/opt/tempesta/bin:/opt/tempesta/sbin:/usr/local/sbin:/usr/local/bin:"
     "/usr/sbin:/usr/bin:/sbin:/bin"
 )
+RESTRICTED_XFWCTL_ACTIONS = frozenset((
+    "--start", "--stop", "--restart",
+    "--start-mgr", "--stop-mgr", "--restart-mgr",
+    "--load-bpf", "--unload-bpf", "--reload-bpf",
+))
 
 SYSTEMCTL_BIN = shutil.which("systemctl")
 NSENTER_BIN = shutil.which("nsenter")
@@ -57,12 +62,23 @@ def service_pid(name):
 
 def main(args):
     if not args:
-        print("Usage: {} [xfwctl arguments...]".format(sys.argv[0]), file=sys.stderr)
+        print("Usage: {} [arguments...]".format(sys.argv[0]), file=sys.stderr)
         return 2
    
+    invoked_name = os.path.basename(sys.argv[0])
+    if invoked_name == "xfwctl":
+        options = iter(args)
+        for option in options:
+            if option in ("-c", "--config"):
+                next(options, None)
+            elif option in RESTRICTED_XFWCTL_ACTIONS:
+                print("{} is disabled in the host wrapper; use systemctl to control {}.".format(option, SERVICE), file=sys.stderr)
+                return 2
+
+    executable = os.path.join(NAMESPACE_BIN_DIR, invoked_name)
     xfw_pid = service_pid(SERVICE)
     environment = {"PATH": NAMESPACE_PATH}
-    command([NSENTER_BIN, "--target", xfw_pid, "--mount", "--root", "--wd", "--", XFWCTL] + args,
+    command([NSENTER_BIN, "--target", xfw_pid, "--mount", "--root", "--wd", "--", executable] + args,
             capture=False, env=environment)
 
 

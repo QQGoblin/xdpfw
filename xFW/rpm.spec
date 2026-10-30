@@ -41,6 +41,7 @@ install -d -m 0755 "%{buildroot}%{app_dir}"
 tar -czf "%{buildroot}%{app_dir}/rootfs.tar.gz" rootfs
 install -D -m 0644 "%{SOURCE1}" "%{buildroot}%{_sysconfdir}/tempesta/xfw.json"
 install -D -m 0755 "%{SOURCE2}" "%{buildroot}/usr/local/bin/xfwctl"
+ln -s xfwctl "%{buildroot}/usr/local/bin/tfw"
 install -D -m 0644 "%{SOURCE3}" "%{buildroot}%{unit_dir}/xfw.service"
 
 %pre
@@ -85,4 +86,5 @@ fi
 %dir %{_sysconfdir}/tempesta
 %{_sysconfdir}/tempesta/xfw.json
 /usr/local/bin/xfwctl
+/usr/local/bin/tfw
 %{unit_dir}/xfw.service
