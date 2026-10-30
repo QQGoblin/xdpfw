@@ -2,8 +2,9 @@
 set -euo pipefail
 
 # 构建 xFW RPM 包
-RPM_OUTPUT_DIR=dist
-RPMBUILD_DIR="rpmbuild"
+RPM_OUTPUT_DIR="$PWD/dist"
+RPMBUILD_DIR="$PWD/rpmbuild"
+ROOTFS_ARCHIVE="rootfs.tar.gz"
 
 rm -rf -- "$RPMBUILD_DIR" "$RPM_OUTPUT_DIR"
 mkdir -p "$RPMBUILD_DIR"/{BUILD,BUILDROOT,RPMS,SOURCES,SPECS,SRPMS} "$RPM_OUTPUT_DIR"
