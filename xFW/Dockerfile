@@ -6,8 +6,8 @@ RUN apt-get update \
         libgrpc++1.51t64 libspdlog1.12 libmaxminddb0 \
     && rm -rf /var/lib/apt/lists/*
 
-COPY bin/bpftool   /usr/local/bin/bpftool
-COPY bin/tempesta  /opt/tempesta
-COPY bin/xFW.sh    /opt/tempesta
+COPY docker/bpftool   /usr/local/bin/bpftool
+COPY docker/tempesta  /opt/tempesta
+COPY docker/xFW.sh    /opt/tempesta
 WORKDIR /opt/tempesta
 CMD [ "/bin/bash"]
